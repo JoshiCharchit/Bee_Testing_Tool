@@ -16,22 +16,32 @@ String targetSerialPort="";
 boolean serialConnected = false;
 String strmsg;
 String msg = "";
+int START_POSITION_FOR_BUTTON = 650;
+int HEIGHT_FOR_BUTTON = 20;
+int Y_AXIS_POSITION = 30;
+int BUTTON_WIDTH = 70;
+int PORT_LIST_WIDTH = 220;
+
+PImage img;
+
 void setup()
 {
   size(800,800,P2D);
   
+  img = loadImage("tool.png");
   
   c = new GUIController (this);
   
-  PRF = new IFButton ("PRF", 10, 30, 60, 20);
-  RST = new IFButton ("RST", 10, 60, 60, 20);
-  rConn = new IFButton ("refresh ports", 105, 0, 120, 20);
-  TMP1 = new IFButton ("TMP,1", 10, 90, 60, 20);
-  TMP2 = new IFButton ("TMP,2", 10, 120, 60, 20);
-  AMB = new IFButton ("AMB", 10, 150, 60, 20);
-  BLESL = new IFButton ("BLESL", 10, 180, 60, 20);
-  BLES2 = new IFButton ("BLES2", 10, 210, 60, 20);
-  SHK = new IFButton ("SHK", 10, 240, 60, 20);
+  rConn = new IFButton ("Refresh List of Ports Available", START_POSITION_FOR_BUTTON - 640, 30, PORT_LIST_WIDTH, HEIGHT_FOR_BUTTON);
+  PRF = new IFButton ("PRF", START_POSITION_FOR_BUTTON, Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);
+  RST = new IFButton ("RST", START_POSITION_FOR_BUTTON, 2*Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);  
+  TMP1 = new IFButton ("TMP,1", START_POSITION_FOR_BUTTON, 3*Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);
+  TMP2 = new IFButton ("TMP,2", START_POSITION_FOR_BUTTON, 4*Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);
+  AMB = new IFButton ("AMB", START_POSITION_FOR_BUTTON, 5*Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);
+  BLESL = new IFButton ("BLESL", START_POSITION_FOR_BUTTON, 6*Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);
+  BLES2 = new IFButton ("BLES2", START_POSITION_FOR_BUTTON, 7*Y_AXIS_POSITION, BUTTON_WIDTH, HEIGHT_FOR_BUTTON);
+  SHK = new IFButton ("SHK", START_POSITION_FOR_BUTTON, 8*Y_AXIS_POSITION, BUTTON_WIDTH,HEIGHT_FOR_BUTTON);
+  
   PRF.addActionListener(this);
   RST.addActionListener(this);
   TMP1.addActionListener(this);
@@ -60,30 +70,34 @@ void setup()
   runStateMachine("");
   loadSerial();
 }
+
 void draw()
 {
-  background(245,247,168);
+  background(255,255,255);
+  image(img, 200, 200, img.width/2, img.height/2);
+  
   serialCheck();
   //showSerial();
-  displayMenu();
+  //displayMenu();
   if(portSelected != -1)
   if(myPort.available()>0)
-    {
-      //background(255);
-      msg= serialData();
-      console(msg);
-      runStateMachine(msg);
-    }else
-    {
-      console(msg);
-      runStateMachine(msg);
-    }
-   if(portSelected != -1)
-     {
-       fill(42,192,212);
-       noStroke();
-       ellipse(240, 120+portSelected*20+11, 8,8);
-     }
+  {
+    //background(255);
+    msg = serialData();
+    console(msg);
+    runStateMachine(msg);
+  }else
+  {
+    console(msg);
+    runStateMachine(msg);
+  }
+  
+  if(portSelected != -1)
+  {
+     fill(42,192,212);
+     noStroke();
+     ellipse(240, 120+portSelected*20+11, 8,8);
+  }
 }
 
 
@@ -108,9 +122,9 @@ void closePort()
 {
    serialConnected = false;
    portSelected = -1;
-  myPort.stop();
-  
+   myPort.stop();
 }
+
 String serialData()
 {
   strmsg = "nothing heard on port\r\n";
@@ -199,7 +213,7 @@ void loadSerial()
      i=10;
    for(int k =0;k<i;k++)
    {
-     comB[k] = new IFButton(Serial.list()[k], 250,120+k*20,220,20);
+     comB[k] = new IFButton(Serial.list()[k], 10,60+k*20,PORT_LIST_WIDTH,20);
      comB[k].addActionListener(this);
      c.add(comB[k]);
     // text("[", 10, height-150+k*12); text(k, 17, height-150+k*12); text("]", 25, height-150+k*12);
