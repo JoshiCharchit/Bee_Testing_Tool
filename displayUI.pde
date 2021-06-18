@@ -1,19 +1,28 @@
 /*Display all Text Fields for Bee Configuration*/
 
+int LOGS_BOX_HEIGHT =  200;
 
 void console(String msg)
 {
   //pointion at bottom displaying device messages updating that part on each message
-  fill(7,10,7);
-  text("console:",5,height-60);
-  fill(10,18,15);
-  rect(0,height-50,width,50);
+  
+  //GREY Border before logging
+  fill(128,128,128);
+  rect(0,height-LOGS_BOX_HEIGHT-30,width,LOGS_BOX_HEIGHT-30);
+
+  //display the updated state
   fill(247,247,247);
-  text(msg, 10,height-35);
-  //display state
-  fill(33,91,117);
-  text(explainState(state),10, height-20);
+  text(explainState(state),10, height - LOGS_BOX_HEIGHT - 10);
+
+  //black background
+  fill(10,18,15);
+  rect(0,height-LOGS_BOX_HEIGHT,width,LOGS_BOX_HEIGHT);
+  
+  //Device prints
+  fill(247,247,247);
+  text(msg, 10,height - LOGS_BOX_HEIGHT + 35);
 }
+
 String explainState(int state)
 {
   switch(state)
@@ -25,12 +34,12 @@ String explainState(int state)
       return "Waiting for RBRES";
     //break;
     case(state_DISCONNECT_WAIT):
-      return "waiting for \"Disconnect\"";
+      return "Waiting for \"Disconnect\"";
     case(state_CLEAR_SEND):
-      return "clearing device";
+      return "Clearing the Device";
    // break;
     case(state_CLEAR_DONE):
-      return "clear Done";
+      return "Device is Cleared! Yeppy";
    // break;
   }
   return "";
@@ -55,10 +64,5 @@ void showSerial()
 */
 void displayMenu()
 {
-  
-  fill(192,232,250);
-  rect(0,1,100,17);
-  fill(0);
-  text(" Testing Tool",10,15);
- 
+  // to load successfully
 }
